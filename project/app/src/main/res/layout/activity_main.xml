@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- 버튼: 정렬 시작 -->
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="시작"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+    <!-- 정렬할 숫자를 입력하는 에디트텍스트 -->
+    <EditText
+        android:id="@+id/inputEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="숫자를 입력하세요 (공백으로 구분)"
+        android:inputType="text" />
+
+    <!-- 정렬 결과를 보여주는 텍스트뷰 -->
+    <TextView
+        android:id="@+id/resultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="정렬 결과:"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+    <!-- 정렬 알고리즘 진행 상황을 보여주는 텍스트뷰 -->
+    <TextView
+        android:id="@+id/progressTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp" />
+
+    <!-- 정렬 알고리즘을 시각화하는 뷰 -->
+    <com.cookandroid.algcan.SortingView
+        android:id="@+id/sortingView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
