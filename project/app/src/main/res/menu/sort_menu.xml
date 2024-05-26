@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/sort_group" android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_selection_sort"
+            android:title="선택 정렬" />
+        <item
+            android:id="@+id/action_insertion_sort"
+            android:title="삽입 정렬" />
+        <item
+            android:id="@+id/action_bubble_sort"
+            android:title="버블 정렬" />
+        <item
+            android:id="@+id/action_quick_sort"
+            android:title="퀵 정렬" />
+    </group>
+</menu>
