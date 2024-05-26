@@ -5,22 +5,40 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
-
-import java.util.Arrays;
+import java.lang.ref.WeakReference;
 
 public class SortingView extends View {
     private int[] arrayToSort;
     private Paint paint;
+    private WeakReference<MainActivity> activityRef; // MainActivity의 약한 참조
+
+    int pivotIndex = -1;
 
     public SortingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
         arrayToSort = new int[]{};
+        if (context instanceof MainActivity) {
+            activityRef = new WeakReference<>((MainActivity) context);
+        }
     }
 
     public void setArrayToSort(int[] arrayToSort) {
         this.arrayToSort = arrayToSort;
-        invalidate(); // View 다시 그리기
+        invalidateView(); // 변경된 경우에만 View 다시 그리기
+    }
+
+    public void setPivotIndex(int pivotIndex){
+        this.pivotIndex = pivotIndex;
+        invalidateView(); // 변경된 경우에만 View 다시 그리기
+    }
+
+    // View 다시 그리기 호출 최적화
+    private void invalidateView() {
+        MainActivity activity = activityRef.get();
+        if (activity != null) {
+            activity.runOnUiThread(() -> invalidate());
+        }
     }
 
     @Override
@@ -35,7 +53,11 @@ public class SortingView extends View {
             return;
         }
 
-        int barWidth = width / arrayToSort.length;
+        // 막대와 화면의 좌우 마진 설정
+        float margin = 20f;
+        float padding = 5f; // 막대 사이의 패딩
+        float availableWidth = width - 2 * margin - (arrayToSort.length - 1) * padding;
+        int barWidth = (int) (availableWidth / arrayToSort.length);
 
         // 배열의 최대값 찾기
         int maxValue = Integer.MIN_VALUE;
@@ -43,21 +65,21 @@ public class SortingView extends View {
             maxValue = Math.max(maxValue, value);
         }
 
-        // 막대와 화면의 좌우 마진 설정
-        float margin = 20f;
-        float availableWidth = width - 2 * margin;
-        barWidth = (int) (availableWidth / arrayToSort.length);
-
         // 배열의 각 요소를 막대로 그림
         for (int i = 0; i < arrayToSort.length; i++) {
-            float left = margin + i * barWidth;
+            float left = margin + i * (barWidth + padding);
             float barHeight = (float) arrayToSort[i] / maxValue * height; // 막대의 높이를 배열 값의 비율로 조정
             float top = height - barHeight;
-            float right = margin + (i + 1) * barWidth;
+            float right = left + barWidth;
             float bottom = height;
 
             // 각 막대의 색과 크기 설정
-            paint.setColor(0xFF000000); // 검정색
+            if(i == pivotIndex){
+                paint.setColor(0xFFFF0000);
+            }
+            else{
+                paint.setColor(0xFF000000); // 검정색
+            }
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRect(left, top, right, bottom, paint);
         }
