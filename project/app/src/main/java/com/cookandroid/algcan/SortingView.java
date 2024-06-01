@@ -13,6 +13,8 @@ public class SortingView extends View {
     private WeakReference<MainActivity> activityRef; // MainActivity의 약한 참조
 
     int pivotIndex = -1;
+    int comparisonIndex = -1;
+    int questIndex = -1;
 
     public SortingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,6 +32,15 @@ public class SortingView extends View {
 
     public void setPivotIndex(int pivotIndex){
         this.pivotIndex = pivotIndex;
+        invalidateView(); // 변경된 경우에만 View 다시 그리기
+    }
+
+    public void setComparisonIndex(int comparisonIndex){
+        this.comparisonIndex = comparisonIndex;
+        invalidateView(); // 변경된 경우에만 View 다시 그리기
+    }
+    public void setQuestIndex(int questIndex){
+        this.questIndex = questIndex;
         invalidateView(); // 변경된 경우에만 View 다시 그리기
     }
 
@@ -74,11 +85,15 @@ public class SortingView extends View {
             float bottom = height;
 
             // 각 막대의 색과 크기 설정
+            paint.setColor(0xFF000000); // 검정색
             if(i == pivotIndex){
-                paint.setColor(0xFFFF0000);
+                paint.setColor(0xFF0000FF); // 파란색
             }
-            else{
-                paint.setColor(0xFF000000); // 검정색
+            if (i == comparisonIndex) {
+                paint.setColor(0xFFFFFF00); // 노란색
+            }
+            if (i == questIndex) {
+                paint.setColor(0xFFFF22FF); // 핑크색
             }
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRect(left, top, right, bottom, paint);

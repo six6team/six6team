@@ -48,7 +48,14 @@
     <com.cookandroid.algcan.SortingView
         android:id="@+id/sortingView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="434dp"
         android:layout_marginTop="16dp" />
 
+    <TextView
+        android:id="@+id/helpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="57dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="검은색 : 요소, 파란색 : 선택된 요소, 노란색 : 비교할 요소, 핑크색 : 탐색중인 요소" />
 </LinearLayout>

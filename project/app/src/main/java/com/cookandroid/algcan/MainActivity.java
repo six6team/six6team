@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < inputArray.length; i++) {
             numbers[i] = Integer.parseInt(inputArray[i]);
         }
-
         // 선택한 정렬 알고리즘에 따라 실행
         switch (selectedSortAlgorithm) {
             case SELECTION_SORT:
@@ -95,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
                 startQuickSortStep();
                 break;
         }
+        sortingView.setPivotIndex(-1);
+        sortingView.setComparisonIndex(-1);
+        sortingView.setQuestIndex(-1);
+        sortingView.setArrayToSort(numbers);
     }
 
     // 선택 정렬 실행
@@ -105,13 +108,9 @@ public class MainActivity extends AppCompatActivity {
         sortingRunnable = new Runnable() {
             @Override
             public void run() {
-                Sort.selectionSortStep(numbers, i, minIndex, swapped).run();
-                SortingView sortingView = activityRef.get().sortingView; // SortingView의 약한 참조
-                if (sortingView != null) {
-                    sortingView.setArrayToSort(numbers);
-                }
+                Sort.selectionSortStep(numbers, i, minIndex, swapped, sortingView).run();
                 if (i[0] < numbers.length - 1) {
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, 50);
                 } else {
                     resultTextView.setText("정렬 결과: " + Arrays.toString(numbers));
                 }
@@ -128,13 +127,9 @@ public class MainActivity extends AppCompatActivity {
         sortingRunnable = new Runnable() {
             @Override
             public void run() {
-                Sort.insertionSortStep(numbers, i, j).run();
-                SortingView sortingView = activityRef.get().sortingView; // SortingView의 약한 참조
-                if (sortingView != null) {
-                    sortingView.setArrayToSort(numbers);
-                }
+                Sort.insertionSortStep(numbers, i, j, sortingView).run();
                 if (!isSorted(numbers)) {
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, 10);
                 } else {
                     resultTextView.setText("정렬 결과: " + Arrays.toString(numbers));
                 }
@@ -151,22 +146,17 @@ public class MainActivity extends AppCompatActivity {
         sortingRunnable = new Runnable() {
             @Override
             public void run() {
-                Sort.bubbleSortStep(numbers, i, j).run();
-                SortingView sortingView = activityRef.get().sortingView; // SortingView의 약한 참조
-                if (sortingView != null) {
-                    sortingView.setArrayToSort(numbers);
-                }
+                Sort.bubbleSortStep(numbers, i, j, sortingView).run();
                 if (!isSorted(numbers)) {
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, 10);
                 } else {
+                    sortingView.setArrayToSort(numbers);
                     resultTextView.setText("정렬 결과: " + Arrays.toString(numbers));
                 }
             }
         };
-
         handler.post(sortingRunnable);
     }
-
     // 퀵 정렬 실행
     private void startQuickSortStep() {
         int low = 0;
@@ -175,12 +165,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Sort.quickSortStep(numbers, low, high, sortingView).run();
-                SortingView sortingView = activityRef.get().sortingView; // SortingView의 약한 참조
-                if (sortingView != null) {
-                    sortingView.setArrayToSort(numbers);
-                }
                 if (!isSorted(numbers)) {
-                    handler.postDelayed(this, 100);
+                    handler.postDelayed(this, 10);
                 } else {
                     resultTextView.setText("정렬 결과: " + Arrays.toString(numbers));
                 }
@@ -188,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         };
         handler.post(sortingRunnable);
     }
+
 
     // 배열이 정렬되었는지 확인하는 유틸리티 메서드
     private boolean isSorted(int[] array) {
